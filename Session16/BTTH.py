@@ -17,12 +17,38 @@ def display_inventory(inventory):
     print("--------------------------------------------------------------")
     print(f'Tổng thể tích máu trong kho: {blood_inventory_stock} ml.')
 
+def check_exits(inventory, blood_bad_id):
+    check = False
+    for inv in inventory:
+        if inv.split("-")[0] == blood_bad_id:
+            check = True
+    return check
+
 def add_blood_bag(inventory):
-    blood_bag_id = input("Nhập mã túi máu mới: ")
-    donor_name = input("Nhập tên người hiến: ")
-    blood_type = input("Nhập nhóm máu: ")
-    blood_volume = input("Nhập thể tích (ml): ")
-    expiry_date = input("Nhập ngày hết hạn (DD/MM/YYYY): ")
+    blood_bag_id = input("Nhập mã túi máu mới: ").strip().upper()
+    if not blood_bag_id:
+        print("Lỗi: Mã túi máu không được để trống!")
+        return
+    if not check_exits(inventory,blood_bag_id):
+        donor_name = input("Nhập tên người hiến: ").title()
+        if not donor_name:
+            print("Lỗi: Tên người hiến không được để trống!")
+            return
+        blood_type = input("Nhập nhóm máu: ").strip().upper()
+        blood_volume = input("Nhập thể tích (ml): ")
+        if not blood_volume.isdigit():
+            print("Lỗi: Thể tích phải là số nguyên lớn hơn 0!")
+            return
+        expiry_date = input("Nhập ngày hết hạn (DD/MM/YYYY): ")
+        new_blood_bag = f"{blood_bag_id}-{donor_name}-{blood_type}-{blood_volume}-{expiry_date}"
+        inventory.append(new_blood_bag)
+        print(f"Thành công: Đã nhập túi máu {blood_bag_id} vào kho!")
+        print("Sau khi chuẩn hóa, dữ liệu được lưu vào list là: ")
+        print(new_blood_bag)
+    else:
+        print("Lỗi: Mã túi máu BL001 đã tồn tại! Vui lòng nhập mã khác.")
+
+
 def main():
     blood_inventory = [
         "BL001-Nguyen Van A-O+-250-31/12/2026",
@@ -41,11 +67,11 @@ def main():
         match choice:
             case "1":
                 display_inventory(blood_inventory)
-            case "1":
+            case "2":
+                add_blood_bag(blood_inventory)
+            case "3":
                 pass
-            case "1":
-                pass
-            case "1":
+            case "4":
                 pass
             case "5":
                 print("Cảm ơn bạn đã sử dụng chương trình!")
