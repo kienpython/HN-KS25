@@ -1,5 +1,12 @@
 # Hệ thống quản lý kho máu
 
+def format_inventory(inventory):
+    new_inventory = []
+    for blood in inventory:
+        blood_replace = blood.replace("-","|")
+        new_inventory.append(blood_replace.replace("||","-|"))
+    return new_inventory
+
 def display_inventory(inventory):
     if not inventory:
         print("Kho máu hiện chưa có túi máu nào.")
@@ -9,9 +16,7 @@ def display_inventory(inventory):
     print("--------------------------------------------------------------")
     blood_inventory_stock = 0
     for blood in inventory:
-        blood_replace = blood.replace("-","|")
-        blood_replace = blood_replace.replace("||","-|")
-        blood_split = blood_replace.split("|")
+        blood_split = blood.split("|")
         blood_inventory_stock += int(blood_split[3])
         print(f"{blood_split[0]:<8}|{blood_split[1]:<15}|{blood_split[2]:<10}|{blood_split[3]:<12} ml|{blood_split[4]:<15}")
     print("--------------------------------------------------------------")
@@ -48,6 +53,34 @@ def add_blood_bag(inventory):
     else:
         print("Lỗi: Mã túi máu BL001 đã tồn tại! Vui lòng nhập mã khác.")
 
+def update_expiry(inventory):
+    blood_bag_id = input("Nhập mã túi máu mới: ").strip().upper()
+    if not blood_bag_id:
+        print("Lỗi: Mã túi máu không được để trống!")
+    if check_exits:  
+        expiry_date = input("Nhập ngày hết hạn mới: ").strip().upper()
+        for index, blood in enumerate(inventory):
+            blood_split = blood.split("|")
+            if blood_split[0] == blood_bag_id:
+                blood_split[-1] = expiry_date
+                new_blood = "|".join(blood_split)
+                inventory[index] = new_blood
+        
+    else:
+        print("Lỗi: Không tìm thấy túi máu BL999 trong kho!")
+
+def remove_blood_bag(inventory):
+    blood_bag_id = input("Nhập mã túi máu cần xóa: ").strip().upper()
+
+    for blood in inventory:
+        blood_id = blood.split("|")[0]
+
+        if blood_id == blood_bag_id:
+            inventory.remove(blood)
+            print("Đã xóa túi máu thành công!")
+            return
+
+    print("Lỗi: Không tìm thấy mã túi máu!")
 
 def main():
     blood_inventory = [
@@ -55,6 +88,7 @@ def main():
         "BL002-Tran Thi B-A--350-15/11/2026",
         "BL003-Le Van C-AB+-250-20/10/2026"
     ]
+    blood_inventory = format_inventory(blood_inventory)
     while True:
         choice = input("""=== HỆ THỐNG QUẢN LÝ KHO MÁU RIKKEI ===
     1. Xem danh sách túi máu trong kho
@@ -70,7 +104,7 @@ def main():
             case "2":
                 add_blood_bag(blood_inventory)
             case "3":
-                pass
+                update_expiry(blood_inventory)
             case "4":
                 pass
             case "5":
@@ -80,3 +114,5 @@ def main():
                 print("Vui lòng chọn từ 1-5")
 
 main()
+
+
