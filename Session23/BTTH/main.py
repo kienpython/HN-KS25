@@ -1,7 +1,7 @@
-from hrm_package.ui_display import display_records
-from hrm_package.attendance_logic import clock_in
-from hrm_package.feature import check_exits
-from hrm_package.time_calc import evaluate_flex_time
+from Session23.BTTH.hrm_package.ui_display import display_records
+from Session23.BTTH.hrm_package.attendance_logic import clock_in
+from Session23.BTTH.hrm_package.feature import check_exits
+from Session23.BTTH.hrm_package.time_calc import evaluate_flex_time
 
 def clock_out(attendance_book):
     employee_id = input("Nhập mã nhân viên: ").strip().upper()

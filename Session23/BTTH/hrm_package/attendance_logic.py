@@ -1,4 +1,4 @@
-from hrm_package.feature import check_exits
+from Session23.BTTH.hrm_package.feature import check_exits
 def clock_in(attendance_book):
     employee_id = input("Nhập mã nhân viên: ").strip().upper()
     attendance_finded = check_exits(attendance_book, employee_id)
